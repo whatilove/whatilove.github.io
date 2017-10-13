@@ -1,2 +1,2 @@
 # Intro
-welcome!
+blog
