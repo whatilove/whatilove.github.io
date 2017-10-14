@@ -9,7 +9,7 @@
 title: 天行健，君子以自强不息。 # ex. I m Chuan
 name: 张进步 # ex. DONGChuan
 email: 
-location: Changsha, China # ex. Nice, France
+location: Shenzen, China # ex. Nice, France
 company: 
 company_url: 
 github_url: https://github.com/whatilove # ex. https://github.com/DONGChuan
@@ -21,8 +21,8 @@ repository:  # ex. DONGChuan/DONGChuan.github.io
 # The base hostname & protocol for your site
 # For local test, please use http://localhost:4000
 # For production, use your github page url. ex. http://dongchuan.github.io
- url: http://localhost:4000
-# url: https://whatilove.github.io
+# url: http://localhost:4000
+ url: https://whatilove.github.io
 
 ## Gem
 gems:
@@ -59,23 +59,22 @@ paginate_path: 'page:num'
 navs:
   -
     href: /
-    label: Home
-
-  #-
- #   href: /open-source
-  #  label: Open-Source
+    label: 首页
 
   -
-    href: /blog
-    label: Blog
+    href: /notebook
+    label: 笔记本
 
+ # -
+   # href: /blog
+   # label: Blog
   -
     href: /bookmark
-    label: Bookmark
+    label: 有用的库
 
   -
     href: /about
-    label: About
+    label: 关于我
 
 # Sidebar to show popular repo
 side_bar_repo_limit: 5 # Number of repos to show
@@ -88,7 +87,9 @@ analytics :
 
 
 # For about.html. Fell free to create your own!
-skill_software_keywords: [Java, C, C++, Qt, Python, MySQL, Oracle, SQLite, PL/SQL, Design Patterns]
-skill_j2ee_keywords: [Spring, Struct, Hibernet, MyBatis, JSP]
-skill_web_keywords: [HTML, CSS, JS, JQuery, Ajax, AngularJS, NodeJS, ExpressJS, MongoDB, Redis, PHP, Symfony, Boostrap]
-skill_mobile_app_keywords: [Android, Sketch UI Desgin]
+skill_software_keywords: [Java]
+skill_j2ee_keywords: [Struts2, SpringMVC, SpringBoot, SpringCloud, MyBatis, Redis]
+skill_web_keywords: [HTML, CSS, JS, JQuery, Ajax, Vue, Vuex, Vue-Router, Boostrap]
+skill_mobile_app_keywords: [Cordova]
+
+permalink: /:year/:month/:day/:title
