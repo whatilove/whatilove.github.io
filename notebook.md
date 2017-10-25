@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 笔记本
-subtitle: <span class="mega-octicon octicon-clippy"></span>&nbsp;&nbsp;学而时习之，不亦说乎。
+title: 地势坤，君子以厚德载物
+subtitle: <span class="mega-octicon octicon-clippy"></span>&nbsp;&nbsp;笔记本
 ---
 
 ## Java
