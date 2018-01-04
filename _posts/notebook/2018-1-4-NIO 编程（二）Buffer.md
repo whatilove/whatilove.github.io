@@ -98,61 +98,165 @@ Buffer 类源码分析：
 下面以 ByteBuffer 类为例：
 
 ```
-// ByteBuffer 继承了 Buffer 并声明了 allocate 方法
-public abstract class ByteBuffer extends Buffer implements Comparable<ByteBuffer> {
-    
-    final byte[] hb; // Non-null only for heap buffers  Buffer 类底层实现采用的是数组
-    final int offset;
-    boolean isReadOnly; // Valid only for heap buffers
+    // ByteBuffer 继承了 Buffer 并声明了 allocate 方法
+    public abstract class ByteBuffer extends Buffer implements Comparable<ByteBuffer> {
+        
+        final byte[] hb; // Non-null only for heap buffers  Buffer 类底层实现采用的是数组
+        final int offset;
+        boolean isReadOnly; // Valid only for heap buffers
 
-    // ByteBuffer 构造方法，包访问权限，由于 ByteBuffer 是抽象类不能实例化，构造方法是供子类调用，并初始化自身属性。
-    ByteBuffer(int mark, int pos, int lim, int cap,   // package-private
-                 byte[] hb, int offset)
-    {
-        super(mark, pos, lim, cap);
-        this.hb = hb;
-        this.offset = offset;
+        // ByteBuffer 构造方法，包访问权限，由于 ByteBuffer 是抽象类不能实例化，构造方法是供子类调用，并初始化自身属性。
+        ByteBuffer(int mark, int pos, int lim, int cap,   // package-private
+                     byte[] hb, int offset)
+        {
+            super(mark, pos, lim, cap);
+            this.hb = hb;
+            this.offset = offset;
+        }
+
+        public static ByteBuffer allocate(int capacity) {
+            if (capacity < 0)
+                throw new IllegalArgumentException();
+            return new HeapByteBuffer(capacity, capacity); // 实际返回的是 ByteBuffer 的子类 HeapByteBuffer，Java 多态的体现。
+        }
     }
 
-    public static ByteBuffer allocate(int capacity) {
-        if (capacity < 0)
-            throw new IllegalArgumentException();
-        return new HeapByteBuffer(capacity, capacity); // 实际返回的是 ByteBuffer 的子类 HeapByteBuffer，Java 多态的体现。
-    }
-}
+    // HeapByteBuffer 类 为 ByteBuffer 实现类。调用 allocate 真正返回的为 HeapByteBuffer 对象。
+    class HeapByteBuffer extends ByteBuffer {
+        
+        // 调用父类 ByteBuffer 构造方法，初始化 mark = -1， postion = 0, capacity = limit = 用户设定的容量。
+        // 并初始化一个 capacity 大小的 byte 数组，所以 `Buffer 类底层实现采用的是数组数据结构。`
+        HeapByteBuffer(int cap, int lim) {            // package-private
+            super(-1, 0, lim, cap, new byte[cap], 0);
+        }
 
-// HeapByteBuffer 类 为 ByteBuffer 实现类。调用 allocate 真正返回的为 HeapByteBuffer 对象。
-class HeapByteBuffer extends ByteBuffer {
-    
-    // 调用父类 ByteBuffer 构造方法，初始化 mark = -1， postion = 0, capacity = limit = 用户设定的容量。
-    // 并初始化一个 capacity 大小的 byte 数组，所以 `Buffer 类底层实现采用的是数组数据结构。`
-    HeapByteBuffer(int cap, int lim) {            // package-private
-        super(-1, 0, lim, cap, new byte[cap], 0);
     }
-
-}
 
 ```
 以上为调用 ByteBuffer.allocate(capacity) 的过程。
 
 ### put()
 
-用于往Buffer中添加元素
+用于向 Buffer 中添加元素，put 方法是在 HeapByteBuffer 中实现的，ByteBuffer byteBuffer = ByteBuffer.allocate(capacity) 中父类 byteBuffer 的引用指向的是 HeapByteBuffer 对象。
+
+put 方法实际就是在当前 position 处存放值。然后 position 再自增。
+
+```
+    // 将值直接存放到当前 position 位置中
+    public ByteBuffer put(byte x) {
+        hb[ix(nextPutIndex())] = x;
+        return this;
+    }
+
+    // nextPutIndex 方法是在 Buffer 中声明的， 该方法的作用是返回下一个存放数据的索引值，就是将当前的 position 返回，并自增。
+    final int nextPutIndex() {  // package-private
+        if (position >= limit)
+            throw new BufferOverflowException();
+        return position++; // 在自增之前返回当前 position 值。
+    }
+
+    // ix 方法作用就是偏移 offset 个位置
+    // ix 方法在 HeapByteBuffer 中声明
+    protected int ix(int i) {
+        return i + offset;
+    }
+
+```
+
+### get()
+
+读取 Buffer 中 position 位置的元素
+
+```
+    // 获取当前 position 位置数据。
+    public int get() {
+        return hb[ix(nextGetIndex())];
+    }
+
+    // 获取指定位置数据
+    public int get(int i) {
+        return hb[ix(checkIndex(i))];
+    }
+
+    // 返回当前 position 位置后，并自增，get 同 put 方法一样，调用后当前 position 都会自增。
+    final int nextGetIndex() {                          // package-private
+        if (position >= limit)
+            throw new BufferUnderflowException();
+        return position++;
+    }
+
+    // 检测输入的位置是否合法，小于0，或者大于等于 limit 值都会抛出异常。
+    final int checkIndex(int i) {                       // package-private
+        if ((i < 0) || (i >= limit))
+            throw new IndexOutOfBoundsException();
+        return i;
+    }
+
+```
 
 ### flip()
 
-用于将写模式转化为读模式
+将写模式转化为读模式
+
+```
+
+    // 将 limit 设置为当前 position 的值，position 重新赋为 0，如果 mark 被赋值也会被废弃。
+    public final Buffer flip() {
+        limit = position;
+        position = 0;
+        mark = -1;
+        return this;
+    }
+
+```
 
 ### hasRemaining()
 
 判断Buffer中是否还有元素可读
 
-### get()
+```
+    // 直接判断当前 position 是否小于 limit 的值。
+    public final boolean hasRemaining() {
+        return position < limit;
+    }
 
-读取Buffer中position位置的元素
+```
 
 ### clear()
 
-清除全部元素
+清空 Buffer 中全部元素
+
+```
+    // clear 方法只是将几个属性全部重置，并没有将 Buffer 中数据清除。
+    public final Buffer clear() {
+        position = 0;
+        limit = capacity;
+        mark = -1;
+        return this;
+    }
+
+```
 
 ### compact()
+
+将已读元素进行清除，未读元素拷贝保留并拷贝到 Buffer 最开始位置。这个也是和 clear() 方法不同的地方。
+
+```
+    // 先进行数组拷贝，将剩余的没有访问的元素拷贝到 Buffer 从零开始的位置
+    public ByteBuffer compact() {
+        System.arraycopy(hb, ix(position()), hb, ix(0), remaining());
+        // 设置 position 为下一个写入元素的位置
+        position(remaining());
+        // 设置 limit 为 Buffer 容量
+        limit(capacity());
+        // 废弃 mark，即将 mark 设置为-1
+        discardMark();
+        return this;
+    }
+
+    // 剩余的元素个数
+    public final int remaining() {
+        return limit - position;
+    }
+
+```
