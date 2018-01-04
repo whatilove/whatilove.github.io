@@ -91,7 +91,7 @@ Buffer 类源码分析：
 
 ## Buffer 中常见的方法介绍
 
-### allocate
+### allocate()
 
 要想获得一个 Buffer 对象首先要进行分配。 每一个 Buffer 子类都有一个 allocate 方法。
 
@@ -135,14 +135,24 @@ class HeapByteBuffer extends ByteBuffer {
 ```
 以上为调用 ByteBuffer.allocate(capacity) 的过程。
 
-### put —— 用于往Buffer中添加元素
+### put()
 
-### flip —— 用于将写模式转化为读模式
+用于往Buffer中添加元素
 
-### hasRemaining:判断Buffer中是否还有元素可读
+### flip()
 
-### get()：读取Buffer中position位置的元素
+用于将写模式转化为读模式
 
-### clear()：清除全部元素
+### hasRemaining()
 
-### compact()：
+判断Buffer中是否还有元素可读
+
+### get()
+
+读取Buffer中position位置的元素
+
+### clear()
+
+清除全部元素
+
+### compact()
