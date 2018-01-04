@@ -122,6 +122,7 @@ public class ChannelTest {
 
         int readLength;
         while ((readLength = fileChannel.read(b)) != -1) {
+            // 切换为读模式
             b.flip();
             byte[] bs = new byte[readLength];
             for (int i = 0; i < readLength; i++) {
@@ -136,6 +137,18 @@ public class ChannelTest {
 ```
 
 ## Selector
+
+选择器提供选择已经就绪的任务的能力。简单来讲 Selector 会不断地轮询多个 Channel，如果某个 Channel 上面发生读或者写事件，这个 Channel 就处于就绪状态，会被 Selector 轮询出来，然后通过 SelectionKey 可以获取就绪 Channel 的集合，进行后续的 I/O 操作。
+
+一个 Selector 可以同时轮询多个 Channel ，它没有最大连接句柄 1024/2048 的限制。这也就意味着只需要一个线程负责 Selector 的轮询，就可以接入成千上万的客户端。
+
+Selector允许单线程处理多个 Channel。如果你的应用打开了多个连接（通道），但每个连接的流量都很低，使用 Selector 就会很方便。例如，在一个聊天服务器中。
+
+这是在一个单线程中使用一个 Selector 处理 3 个 Channel 的图示：
+
+![](/assets/images/post/java/overview-selectors.png)
+
+要使用 Selector，得向 Selector 注册 Channel，然后调用它的 select()方法。这个方法会一直阻塞到某个注册的通道有事件就绪。一旦这个方法返回，线程就可以处理这些事件，事件的例子有如新连接进来，数据接收等。
 
 
 
