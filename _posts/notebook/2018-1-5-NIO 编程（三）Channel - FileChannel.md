@@ -43,9 +43,9 @@ public interface Channel extends Closeable {
 
 ### FileChannel
 
-Java NIO中的 FileChannel 主要是用来读、写和映射一个系统文件的 Channel，它是一个抽象类，具体由 FileChannelImpl 实现。
+Java NIO中的 FileChannel 主要是用来读、写和映射一个系统文件的 Channel，它是一个抽象类，具体由FileChannelImpl实现。
 
-`FileChannel无法设置为非阻塞模式，它总是运行在阻塞模式下。`
+FileChannel无法设置为非阻塞模式，它总是运行在阻塞模式下。
 
 源码如下：
 
@@ -76,7 +76,6 @@ Java NIO中的 FileChannel 主要是用来读、写和映射一个系统文件�
 ```
 
 #### 打开 FileChannel
-
 在使用FileChannel之前，必须先打开它。但是，FileChannel 抽象类不能通过实例化得到，需要通过使用一个InputStream、OutputStream或RandomAccessFile来获取一个FileChannel实例。下面是通过RandomAccessFile打开FileChannel的示例：
 
 ```
@@ -84,7 +83,6 @@ RandomAccessFile randomAccessFile = new RandomAccessFile("/Users/flyxk/yarn.lock
 FileChannel fileChannel = randomAccessFile.getChannel();
 
 ```
-
 getChannel 源码如下：
 
 ```
@@ -166,7 +164,6 @@ read 源码如下：
 	}
 
 ```
-
 注意FileChannel.write()是在while循环中调用的。因为无法保证write()方法一次能向FileChannel写入多少字节，因此需要重复调用write()方法，直到Buffer中已经没有尚未写入通道的字节。
 
 write 源码如下：

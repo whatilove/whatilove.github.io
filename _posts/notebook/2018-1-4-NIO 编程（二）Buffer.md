@@ -6,6 +6,7 @@ tags: [java]
 ---
 
 缓冲区本质上是一块可以写入数据，然后可以从中读取数据的内存。这块内存被包装成NIO Buffer对象，并提供了一组方法，用来方便的访问该块内存。
+由于ByteBuffer是非线程安全的，所以多线程访问的时候也必须加锁。
 
 ## Buffer 的三个重要属性
 
@@ -45,6 +46,9 @@ Buffer 类源码分析：
     private int position = 0;
     private int limit;
     private int capacity;
+
+    // 在 direct buffers 中使用
+    long address;
 
 ```
 
@@ -97,6 +101,13 @@ Buffer 类源码分析：
 
 下面以 ByteBuffer 类为例：
 
+ByteBuffer 也是一个抽象类，它的实现类有 HeapByteBuffer 和 DirectByteBuffer 两种。
+
+* HeapByteBuffer：是在jvm虚拟机的堆上申请内存空间
+* DirectByteBuffer：是直接在物理内存中申请内存空间
+
+DirectByteBuffer 是在jvm堆外直接申请一块空间，其把文件映射到该内存空间中，与MappedByteBuffer较为类似，在特大文件的读写方面效率非常高。
+
 ```
     // ByteBuffer 继承了 Buffer 并声明了 allocate 方法
     public abstract class ByteBuffer extends Buffer implements Comparable<ByteBuffer> {
@@ -114,10 +125,16 @@ Buffer 类源码分析：
             this.offset = offset;
         }
 
+        // 堆上面的分配
         public static ByteBuffer allocate(int capacity) {
             if (capacity < 0)
                 throw new IllegalArgumentException();
             return new HeapByteBuffer(capacity, capacity); // 实际返回的是 ByteBuffer 的子类 HeapByteBuffer，Java 多态的体现。
+        }
+
+        // 直接在物理内存上分配
+        public static ByteBuffer allocateDirect(int capacity) {
+            return new DirectByteBuffer(capacity);
         }
     }
 
@@ -254,9 +271,30 @@ put 方法实际就是在当前 position 处存放值。然后 position 再自�
         return this;
     }
 
+```
+
+### remaining()
+
+仅在读模式下使用，用来获取还未读出的字节数。
+
+```
     // 剩余的元素个数
     public final int remaining() {
         return limit - position;
+    }
+
+```
+
+### rewind()
+
+从头读写数据或读数据
+
+```
+    //重置 position 为0，从头读写数据或读数据
+    public final Buffer rewind() {
+        position = 0;
+        mark = -1;
+        return this;
     }
 
 ```
