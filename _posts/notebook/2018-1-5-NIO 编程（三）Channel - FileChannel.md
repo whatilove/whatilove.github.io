@@ -199,3 +199,51 @@ write 源码如下：
 	}
 
 ```
+
+#### 关闭 FileChannel
+
+用完 FileChannel 后必须将其关闭。如：
+
+```
+channel.close();
+
+```
+
+#### FileChannel 的 size 方法
+
+FileChannel 实例的 size() 方法将返回该实例所关联文件的大小。
+
+```
+
+long fileSize = channel.size();
+
+```
+
+#### FileChannel 的 truncate 方法
+
+FileChannel 的 truncate 方法
+
+```
+channel.truncate(1024);
+
+```
+
+这个例子截取文件的前1024个字节。
+
+#### FileChannel 的 force 方法
+
+FileChannel.force()方法将通道里尚未写入磁盘的数据强制写到磁盘上。出于性能方面的考虑，操作系统会将数据缓存在内存中，所以无法保证写入到FileChannel里的数据一定会即时写到磁盘上。要保证这一点，需要调用force()方法。
+
+force()方法有一个boolean类型的参数，指明是否同时将文件元数据（权限信息等）写到磁盘上。
+
+下面的例子同时将文件数据和元数据强制写到磁盘上：
+
+```
+
+channel.force(true);
+
+```
+
+### 参考
+
+[参考](http://ifeve.com/file-channel/)
