@@ -220,7 +220,7 @@ long fileSize = channel.size();
 
 ### FileChannel 的 truncate 方法
 
-FileChannel 的 truncate 方法
+FileChannel 的 truncate 方法 
 
 ```
 channel.truncate(1024);
