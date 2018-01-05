@@ -227,7 +227,7 @@ channel.truncate(1024);
 
 ```
 
-这个例子截取文件的前1024个字节。
+这个例子截取文件的前1024个字节。 
 
 ### FileChannel 的 force 方法
 
