@@ -1,7 +1,7 @@
 ---
 layout: post
 title: NIO 编程（二）Buffer
-categories: 笔记本
+categories: io
 tags: [java]
 ---
 
