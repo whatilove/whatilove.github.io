@@ -1,7 +1,7 @@
 ---
 layout: post
 title: NIO 编程（一）Java NIO 概述
-categories: io
+categories: Java IO
 tags: [java]
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: NIO 编程（五）ServerSocketChannel、SocketChannel
-categories: io
+categories: Java IO
 tags: [java]
 ---
 

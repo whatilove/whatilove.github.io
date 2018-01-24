@@ -1,7 +1,7 @@
 ---
 layout: post
 title: NIO 编程（五）Selector
-categories: io
+categories: Java IO
 tags: [java]
 ---
 
