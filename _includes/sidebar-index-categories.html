@@ -1,9 +1,9 @@
 <h3 class="sidebar-title">分类</h3>
 <div id="blog-categories">
+    <div>{{site.categories}}</div>
     <ul class="list-group">
         {% for category in site.categories %}
         <li class="list-group-item">
-            {{category}}
             <a href="{{site.url}}/{{ category | first }}">{{ category | first }}</a>
             <span class="badge">{{ category[1].size }}</span>
         </li>
