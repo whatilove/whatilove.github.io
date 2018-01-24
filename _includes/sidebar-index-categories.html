@@ -1,7 +1,7 @@
 <h3 class="sidebar-title">分类</h3>
 <div id="blog-categories">
     <ul class="list-group">
-        {% for category in site.categories['Java IO'] %}
+        {% for category in site.categories.['Java IO'] %}
         <li class="list-group-item">
             <a href="{{site.url}}/java-io">{{ category | first }}</a>
             <span class="badge">{{ category[1].size }}</span>
