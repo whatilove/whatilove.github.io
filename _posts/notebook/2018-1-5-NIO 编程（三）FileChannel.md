@@ -1,7 +1,7 @@
 ---
 layout: post
 title: NIO 编程（三）Channel - FileChannel
-categories: Java IO
+categories: [Java IO]
 tags: [java]
 ---
 
