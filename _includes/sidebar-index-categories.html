@@ -1,12 +1,18 @@
 <h3 class="sidebar-title">分类</h3>
 <div id="blog-categories">
     <ul class="list-group">
-        {% for category in site.categories %}
         <li class="list-group-item">
-            <a href="{{site.url}}/{{ category | first }}">{{ category | first }}</a>
-            <span class="badge">{{ category[1].size }}</span>
+            <a href="{{site.url}}/java-io">Java IO</a>
+            <span class="badge">{{ site.categories['Java IO'].size }}</span>
         </li>
-        {% endfor %}
+        <li class="list-group-item">
+            <a href="{{site.url}}/java-web">Java Web</a>
+            <span class="badge">{{ site.categories['Java Web'].size }}</span>
+        </li>
+        <li class="list-group-item">
+            <a href="{{site.url}}/pattern">设计模式</a>
+            <span class="badge">{{ site.categories['设计模式'].size }}</span>
+        </li>
     </ul>
 </div>
 <script type="text/javascript">

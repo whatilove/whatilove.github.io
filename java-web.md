@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Java IO
+title: Java Web
 css: ['blog-page.css']
 ---
-{% include java-io.html %}
+{% include java-web.html %}
