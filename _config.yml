@@ -68,9 +68,9 @@ navs:
  # -
    # href: /blog
    # label: Blog
-  -
-    href: /bookmark
-    label: bookmark
+  #-
+    # href: /bookmark
+    # label: bookmark
 
   -
     href: /about
