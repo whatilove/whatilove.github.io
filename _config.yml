@@ -61,16 +61,16 @@ navs:
     href: /
     label: 首页
 
-  -
-    href: /notebook
-    label: 笔记本
+  # -
+    # href: /notebook
+    # label: 笔记本
 
  # -
    # href: /blog
    # label: Blog
-  #-
-    # href: /bookmark
-    # label: bookmark
+  # -
+    # href: /frontend
+    # label: 前端
 
   -
     href: /about
